@@ -1,4 +1,3 @@
-import sys
 import random
 import string
 
@@ -8,41 +7,56 @@ characters_left = -1
 #################################################################################
 
 
-def update_char_left(number_of_char):
+def valid_char_left(name):
     global characters_left
-    if number_of_char < 0 or number_of_char > characters_left:
-        print("Not in range 0,", characters_left)
-        sys.exit(0)
 
-    else:
-        characters_left -= number_of_char
-        print(characters_left, "characters left")
+    while True:
+        try:
+            input_chars = int(input("How many " + name + "?: "))
+        except ValueError:
+            print("invalid character (enter a number)")
+            continue
+
+        if input_chars < 0 or input_chars > characters_left:
+            print("Not in range 0,", characters_left)
+            continue
+        else:
+            characters_left -= input_chars
+            print(characters_left, "characters left")
+            break
+    return input_chars
+
+
+def valid_pass():
+    global characters_left
+
+    while True:
+        try:
+            input_chars = int(input("Password length: "))
+        except ValueError:
+            print("invalid character (enter a number)")
+            continue
+
+        if input_chars < 0:
+            print("Password length cannot be negative")
+            continue
+        else:
+            characters_left = input_chars
+            break
+    return input_chars
 
 
 #################################################################################
+#################################################################################
 
-password_length = int(input("Password length: "))
-if password_length < 5:
-    print("Password must be at least 5-characters long")
-    sys.exit(0)
-else:
-    characters_left = password_length
+password_length = valid_pass()
 
 
-lowercase_letters = int(input("How many lowercase letters?: "))
-update_char_left(lowercase_letters)
+lowercase_letters = valid_char_left("lowercase letters")
+uppercase_letters = valid_char_left("uppercase letters")
+special_characters = valid_char_left("special characters")
+digits = valid_char_left("digits")
 
-
-uppercase_letters = int(input("How many uppercase letters?: "))
-update_char_left(uppercase_letters)
-
-
-special_characters = int(input("How many special characters?: "))
-update_char_left(special_characters)
-
-
-digits = int(input("How many digits?: "))
-update_char_left(digits)
 
 if characters_left > 0:
     print("Did not use all characters, lowercase will be used to fill the gap")
