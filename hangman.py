@@ -34,6 +34,13 @@ for _ in word:
 
 while True:
     letter = input("Input a letter: ")
+    if len(letter) > 1 or not letter.isalpha():
+        print("Wrong input! Type a letter.")
+        continue
+    if used_letters.__contains__(letter):
+        print('used that letter before')
+        continue
+
     used_letters.append(letter)
 
     found_indexes = find_indexes(word, letter)
