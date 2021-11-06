@@ -1,56 +1,48 @@
 import sqlite3
 
+#################################################################################
 
-connection = sqlite3.connect("todo.db")
+
+class Task:
+    def __init__(self, name, progress):
+        self.name = name
+        self.progress = progress
+
+    def show_task(self):
+        print("Name: " + self.name + " Progress: " + self.progress)
+
+
+#################################################################################
 
 
 def create_table(connection):
     try:
         cur = connection.cursor()
-        cur.execute("""CREATE TABLE task(task text)""")
+        cur.execute("""CREATE TABLE task(task_progress text, task_name text)""")
     except:
         pass
 
 
-#################################################################################
-
-
-# class Task:
-#     def __init__(self, name, progress):
-#         self.name = name
-#         self.progress = progress
-#
-#     def show_task(self):
-#         print("Name: " + self.name + " Progress: " + self.progress)
-
-
-#################################################################################
-
-
 def add_task(connection):
     print("Adding new task!")
-    task = input("Name: ")
-    if task == "0":
-        print("Back to main menu")
-    else:
-        cur = connection.cursor()
-        cur.execute("""INSERT INTO task(task) VALUES(?)""", (task,))
-        connection.commit()
-        print("Task added successfully!")
-    # task_progress = input("0.Done\n1.In progress\nChoose an option: ")
-    #
-    # temp = Task(task_name, task_progress)
-    # tasks.append(temp)
+    task_progress = input("0.Done\n1.In progress\nChoose an option: ")
+    task_name = input("Name: ")
+    temp = Task(task_name, task_progress)
+
+    cur = connection.cursor()
+    cur.execute("""INSERT INTO task(task_progress, task_name) VALUES(?, ?)""", (task_progress,task_name))
+    connection.commit()
+    print("Task added successfully!")
 
 
 def show_tasks(connection):
     print('show tasks in progress')
     cur = connection.cursor()
-    cur.execute("""SELECT rowid, task FROM task""")
+    cur.execute("""SELECT rowid, task_progress, task_name FROM task""")
     result = cur.fetchall()
 
     for row in result:
-        print(str(row[0]) + " - " + row[1])
+        print("Index: " + str(row[0]) + " Progress: " + str(row[1]) + " Name: " + str(row[2]))
 
 
 def delete_task(connection):
@@ -70,6 +62,7 @@ def delete_task(connection):
 #################################################################################
 #################################################################################
 
+connection = sqlite3.connect("todo.db")
 
 create_table(connection)
 
