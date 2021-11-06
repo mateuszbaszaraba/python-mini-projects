@@ -12,6 +12,21 @@ def create_table(connection):
         pass
 
 
+#################################################################################
+
+
+# class Task:
+#     def __init__(self, name, progress):
+#         self.name = name
+#         self.progress = progress
+#
+#     def show_task(self):
+#         print("Name: " + self.name + " Progress: " + self.progress)
+
+
+#################################################################################
+
+
 def add_task(connection):
     print("Adding new task!")
     task = input("Name: ")
@@ -22,6 +37,10 @@ def add_task(connection):
         cur.execute("""INSERT INTO task(task) VALUES(?)""", (task,))
         connection.commit()
         print("Task added successfully!")
+    # task_progress = input("0.Done\n1.In progress\nChoose an option: ")
+    #
+    # temp = Task(task_name, task_progress)
+    # tasks.append(temp)
 
 
 def show_tasks(connection):
@@ -36,6 +55,9 @@ def show_tasks(connection):
 
 def delete_task(connection):
     task_index = int(input("Enter index of the task to delete: "))
+    if task_index < 0:
+        print("Task with this index does not exist!")
+        return
     cur = connection.cursor()
     rows_deleted = cur.execute("""DELETE FROM task WHERE rowid=?""", (task_index,)).rowcount
     connection.commit()
