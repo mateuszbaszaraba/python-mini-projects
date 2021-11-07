@@ -1,7 +1,7 @@
 import sys
+import requests
 
 no_of_tries = 5
-word = "mateusza"
 used_letters = []
 
 user_word = []
@@ -25,9 +25,20 @@ def game_stat():
     print("Used letters:", used_letters)
     print()
 
+
 #################################################################################
 #################################################################################
 
+
+response = requests.get('https://random-word-api.herokuapp.com/word?number=1')
+
+if response.status_code != 200:
+    print('Something went wrong. Try again later.')
+    sys.exit(0)
+
+word = response.json()[0]
+
+# print(word)
 
 for _ in word:
     user_word.append('_')
@@ -50,7 +61,7 @@ while True:
         no_of_tries -= 1
 
         if no_of_tries == 0:
-            print("Game over")
+            print("Game over! The word was:", word)
             sys.exit(0)
     else:
         for index in found_indexes:
